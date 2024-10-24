@@ -4,33 +4,36 @@ on:
     push:
         branches: ["main"]
 jobs:
-    build-image:
+    # build-image:
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #     - name: Checkout repository
+    #       uses: actions/checkout@v2
+    #     # Login to Google Cloud
+    #     - name: Login to Google Cloud
+    #       uses: 'google-github-actions/auth@v2'
+    #       with:
+    #         credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+    #      # Login to GCR
+    #     - name: Login to Google Container Registry
+    #       uses: docker/login-action@v3
+    #       with:
+    #         registry: gcr.io
+    #         username: _json_key
+    #         password: '${{ secrets.GOOGLE_CREDENTIALS }}'
+    #     # Tag Docker image and push to Google Artifact Registry
+    #     - name: Tag Docker image and push to Google
+    #       uses: docker/build-push-action@v6
+    #       with:
+    #         push: true
+    #         tags:  ${{secrets.CONTAINER_REGISTRY_ENDPOINT}}/angular-dockerized:latest
+    deploy-app:
+       # needs: build-image
         runs-on: ubuntu-latest
         steps:
         - name: Checkout repository
           uses: actions/checkout@v2
-        # Login to Google Cloud
-        - name: Login to Google Cloud
-          uses: 'google-github-actions/auth@v2'
-          with:
-            credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
-         # Login to GCR
-        - name: Login to Google Container Registry
-          uses: docker/login-action@v3
-          with:
-            registry: gcr.io
-            username: _json_key
-            password: '${{ secrets.GOOGLE_CREDENTIALS }}'
-        # Tag Docker image and push to Google Artifact Registry
-        - name: Tag Docker image and push to Google
-          uses: docker/build-push-action@v6
-          with:
-            push: true
-            tags:  ${{secrets.CONTAINER_REGISTRY_ENDPOINT}}/angular-dockerized:latest
-    deploy-app:
-        needs: build-image
-        runs-on: ubuntu-latest
-        steps:
+
         - name: Setup SSH
           shell: bash
           run: |
