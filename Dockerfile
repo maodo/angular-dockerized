@@ -18,7 +18,7 @@ RUN npm install
 RUN npm run build:prod
 
 # Stage 2
-# Defining nginx image to be used
+# Defining nginx image to be usedc
 FROM nginx:1.21.6-alpine
 
 # Let's copy our nginx configuration
