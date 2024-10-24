@@ -48,6 +48,6 @@ jobs:
           shell: bash
           run: |
            service ssh status
-           ansible-playbook -i infrastructure/ansible/inventory.ini infrastructure/ansible/playbook.angular.yml -vvv
+           ansible-playbook -i infrastructure/ansible/inventory.ini infrastructure/ansible/playbook.angular.yml -vvv -e "ansible_ssh_common_args='-o ConnectTimeout=30'"
           env:
             GCR_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_CREDENTIALS }}
