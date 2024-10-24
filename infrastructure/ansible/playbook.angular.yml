@@ -1,6 +1,8 @@
 - name: Angular Docker image pull and run
   hosts: webserver
   become: true
+  ansible_become_method: 'su'
+  ansible_become_exe: 'sudo -p "Password: " su -'
   vars:
    gcp_service_account_key: "{{ lookup('env', 'GCR_SERVICE_ACCOUNT_KEY') }}"
    image_tag: "latest"
