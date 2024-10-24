@@ -80,7 +80,7 @@
         docker login -u _json_key --password-stdin https://gcr.io
       environment:
         GCR_KEY_FILE: /root/.docker/keyfile.json
-    - name: Start Docker service
+    - name: Start Docker service 
       service:
         name: docker
         state: started
