@@ -35,7 +35,7 @@
     - name: Authenticate Google Cloud with Service Account
       shell: |
         gcloud auth activate-service-account --key-file=/root/keyfile.json
-        gcloud config set project YOUR_PROJECT_ID
+        gcloud config set project devops-journey-439200
       environment:
         GOOGLE_APPLICATION_CREDENTIALS: /root/keyfile.json
 
