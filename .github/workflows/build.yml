@@ -48,6 +48,6 @@ jobs:
           shell: bash
           run: |
            service ssh status
-           ansible-playbook -i infrastructure/ansible/inventory.ini infrastructure/ansible/playbook.angular.yml -v
+           ansible-playbook -i infrastructure/ansible/inventory.ini infrastructure/ansible/playbook.angular.yml -vvv
           env:
             GCR_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_CREDENTIALS }}
