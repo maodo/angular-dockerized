@@ -4,40 +4,40 @@
   vars:
    gcp_service_account_key: "{{ lookup('env', 'GCR_SERVICE_ACCOUNT_KEY') }}"
   tasks:
-    - name: Update apt packages index and install packages
-      apt:
-        update_cache: yes
-        state: present
-        name: "{{ item  }}"
-      with_items:
-        - curl
-        - software-properties-common
-        - apt-transport-https
-        - ca-certificates
-        - gnupg
-    - name: Install cloud SDK for Debian
-      shell: |
-        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
-        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    # - name: Update apt packages index and install packages
+    #   apt:
+    #     update_cache: yes
+    #     state: present
+    #     name: "{{ item  }}"
+    #   with_items:
+    #     - curl
+    #     - software-properties-common
+    #     - apt-transport-https
+    #     - ca-certificates
+    #     - gnupg
+    # - name: Install cloud SDK for Debian
+    #   shell: |
+    #     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    #     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 
-    - name: Install Google Cloud SDK
-      apt:
-        name: google-cloud-cli
-        state: present
-        update_cache: yes
+    # - name: Install Google Cloud SDK
+    #   apt:
+    #     name: google-cloud-cli
+    #     state: present
+    #     update_cache: yes
 
-    - name: Create Service Account Key File
-      copy:
-        content: "{{ gcp_service_account_key }}"
-        dest: /root/keyfile.json
-        mode: '0600'
+    # - name: Create Service Account Key File
+    #   copy:
+    #     content: "{{ gcp_service_account_key }}"
+    #     dest: /root/keyfile.json
+    #     mode: '0600'
 
-    - name: Authenticate Google Cloud with Service Account
-      shell: |
-        gcloud auth activate-service-account --key-file=/root/keyfile.json
-        gcloud config set project devops-journey-439200
-      environment:
-        GOOGLE_APPLICATION_CREDENTIALS: /root/keyfile.json
+    # - name: Authenticate Google Cloud with Service Account
+    #   shell: |
+    #     gcloud auth activate-service-account --key-file=/root/keyfile.json
+    #     gcloud config set project devops-journey-439200
+    #   environment:
+    #     GOOGLE_APPLICATION_CREDENTIALS: /root/keyfile.json
 
     - name: Docker dependencies installation
       shell: |
