@@ -5,60 +5,60 @@
    gcp_service_account_key: "{{ lookup('env', 'GCR_SERVICE_ACCOUNT_KEY') }}"
    image_tag: "latest"
   tasks:
-    - name: Update apt packages index and install packages
-      apt:
-        update_cache: yes
-        state: present
-        name: "{{ item  }}"
-      with_items:
-        - curl
-        - software-properties-common
-        - apt-transport-https
-        - ca-certificates
-        - gnupg
-    - name: Install cloud SDK for Debian
-      shell: |
-        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
-        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    # - name: Update apt packages index and install packages
+    #   apt:
+    #     update_cache: yes
+    #     state: present
+    #     name: "{{ item  }}"
+    #   with_items:
+    #     - curl
+    #     - software-properties-common
+    #     - apt-transport-https
+    #     - ca-certificates
+    #     - gnupg
+    # - name: Install cloud SDK for Debian
+    #   shell: |
+    #     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    #     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 
-    - name: Install Google Cloud SDK
-      apt:
-        name: google-cloud-cli
-        state: present
-        update_cache: yes
+    # - name: Install Google Cloud SDK
+    #   apt:
+    #     name: google-cloud-cli
+    #     state: present
+    #     update_cache: yes
 
-    - name: Create Service Account Key File
-      copy:
-        content: "{{ gcp_service_account_key }}"
-        dest: /root/keyfile.json
-        mode: '0600'
+    # - name: Create Service Account Key File
+    #   copy:
+    #     content: "{{ gcp_service_account_key }}"
+    #     dest: /root/keyfile.json
+    #     mode: '0600'
 
-    - name: Authenticate Google Cloud with Service Account
-      shell: |
-        gcloud auth activate-service-account --key-file=/root/keyfile.json
-        gcloud config set project devops-journey-439200
-      environment:
-        GOOGLE_APPLICATION_CREDENTIALS: /root/keyfile.json
+    # - name: Authenticate Google Cloud with Service Account
+    #   shell: |
+    #     gcloud auth activate-service-account --key-file=/root/keyfile.json
+    #     gcloud config set project devops-journey-439200
+    #   environment:
+    #     GOOGLE_APPLICATION_CREDENTIALS: /root/keyfile.json
 
-    - name: Docker dependencies installation
-      shell: |
-        install -m 0755 -d /etc/apt/keyrings
-        curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-        chmod a+r /etc/apt/keyrings/docker.asc
-        echo \
-        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian bullseye stable" | \ 
-        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    - name: Docker installation
-      apt: 
-        update_cache: yes
-        state: present
-        name: "{{ item  }}"
-      with_items:
-        - docker-ce 
-        - docker-ce-cli 
-        - containerd.io 
-        - docker-buildx-plugin 
-        - docker-compose-plugin
+    # - name: Docker dependencies installation
+    #   shell: |
+    #     install -m 0755 -d /etc/apt/keyrings
+    #     curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+    #     chmod a+r /etc/apt/keyrings/docker.asc
+    #     echo \
+    #     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian bullseye stable" | \ 
+    #     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    # - name: Docker installation
+    #   apt: 
+    #     update_cache: yes
+    #     state: present
+    #     name: "{{ item  }}"
+    #   with_items:
+    #     - docker-ce 
+    #     - docker-ce-cli 
+    #     - containerd.io 
+    #     - docker-buildx-plugin 
+    #     - docker-compose-plugin
     # - name: Add user to docker group
     #   user:
     #     name: "{{ ansible_user }}"
