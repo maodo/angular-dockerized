@@ -14,17 +14,23 @@
         - software-properties-common
         - apt-transport-https
         - ca-certificates
-    - name: Add Google Cloud SDK repository
-      apt_repository:
-        repo: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
-        state: present
-        filename: "google-cloud-sdk"
-        update_cache: yes
+        - gnupg
+    - name: Install cloud SDK for Debian
+      shell: |
+        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    # - name: Add Google Cloud SDK repository
+    #   apt_repository:
+    #     repo: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
+    #     state: present
+    #     filename: "google-cloud-sdk"
+    #     update_cache: yes
 
     - name: Install Google Cloud SDK
       apt:
-        name: google-cloud-sdk
+        name: google-cloud-cli
         state: present
+        update_cache: yes
 
     - name: Create Service Account Key File
       copy:
