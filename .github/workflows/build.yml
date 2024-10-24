@@ -28,6 +28,7 @@ jobs:
             push: true
             tags:  ${{secrets.CONTAINER_REGISTRY_ENDPOINT}}/angular-dockerized:latest
     deploy-app:
+        needs: build-image
         runs-on: ubuntu-latest
         steps:
         - name: Setup SSH
