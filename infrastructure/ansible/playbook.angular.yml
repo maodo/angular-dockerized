@@ -2,7 +2,7 @@
   hosts: webserver
   become: true
   vars:
-   gcp_service_account_key:"{{ lookup('env', 'GCR_SERVICE_ACCOUNT_KEY') }}"
+   gcp_service_account_key: "{{ lookup('env', 'GCR_SERVICE_ACCOUNT_KEY') }}"
   tasks:
     - name: Update apt packages index and install packages
       apt:
