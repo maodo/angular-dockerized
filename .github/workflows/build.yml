@@ -27,3 +27,22 @@ jobs:
           with:
             push: true
             tags:  ${{secrets.CONTAINER_REGISTRY_ENDPOINT}}/angular-dockerized:latest
+    deploy-app:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Setup SSH
+          shell: bash
+          run: |
+            eval `ssh-agent -s`
+            mkdir -p /home/runner/.ssh/
+            touch /home/runner/.ssh/id_rsa
+            echo -e "${{secrets.SSH_PRIVATE_KEY}}" > /home/runner/.ssh/id_rsa
+            chmod 700 /home/runner/.ssh/id_rsa
+            ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{secrets.HOST}} >> /home/runner/.ssh/known_hosts
+        - name: Run ansible script
+          shell: bash
+          run: |
+           service ssh status
+           ansible-playbook -i infrastructure/ansible/inventory.ini infrastructure/ansible/playbook.angular.yml -v
+          env:
+            GCR_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_CREDENTIALS }}

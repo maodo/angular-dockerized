@@ -1,0 +1,43 @@
+- name: Angular Docker image pull and run
+  hosts: webserver
+  become: true
+  vars:
+   gcp_service_account_key:"{{ lookup('env', 'GCR_SERVICE_ACCOUNT_KEY') }}"
+  tasks:
+    - name: Update apt packages index and install packages
+      apt:
+        update_cache: yes
+        state: present
+        name: "{{ item  }}"
+      with_items:
+        - curl
+        - software-properties-common
+        - apt-transport-https
+        - ca-certificates
+    - name: Add Google Cloud SDK repository
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
+        state: present
+        filename: "google-cloud-sdk"
+        update_cache: yes
+
+    - name: Install Google Cloud SDK
+      apt:
+        name: google-cloud-sdk
+        state: present
+
+    - name: Create Service Account Key File
+      copy:
+        content: "{{ gcp_service_account_key }}"
+        dest: /root/keyfile.json
+        mode: '0600'
+
+    - name: Authenticate Google Cloud with Service Account
+      shell: |
+        gcloud auth activate-service-account --key-file=/root/keyfile.json
+        gcloud config set project YOUR_PROJECT_ID
+      environment:
+        GOOGLE_APPLICATION_CREDENTIALS: /root/keyfile.json
+
+    - name: Verify Google Cloud Authentication
+      shell: gcloud auth list
