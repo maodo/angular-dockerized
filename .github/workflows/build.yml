@@ -37,6 +37,7 @@ jobs:
         - name: Setup SSH
           shell: bash
           run: |
+            service ssh status
             eval `ssh-agent -s`
             mkdir -p /home/runner/.ssh/
             touch /home/runner/.ssh/id_rsa
