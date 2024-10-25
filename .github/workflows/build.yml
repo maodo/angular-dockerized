@@ -22,7 +22,7 @@ jobs:
             username: _json_key
             password: '${{ secrets.GOOGLE_CREDENTIALS }}'
         # Tag Docker image and push to Google Artifact Registry
-        - name: Tag Docker image and push to Google
+        - name: Tag Docker image and push to Google Container Registry
           uses: docker/build-push-action@v6
           with:
             push: true
