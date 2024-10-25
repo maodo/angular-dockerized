@@ -61,10 +61,7 @@
         - containerd.io 
         - docker-buildx-plugin 
         - docker-compose-plugin
-    - name: Add user to docker group
-      user:
-        name: "{{ ansible_user }}"
-        groups: docker
+        
     - name: Create GCR authentication directory for Docker
       file:
         path: /root/.docker
