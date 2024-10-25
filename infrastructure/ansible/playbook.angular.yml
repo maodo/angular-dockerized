@@ -80,11 +80,8 @@
       environment:
         GCR_KEY_FILE: /root/.docker/keyfile.json
     - name: login GCR
-      docker_login:
-        registry_url: gcr.io
-        username: _json_key
-        password: '{{ gcp_service_account_key }}'
-    
+      shell: |
+        docker login -u _json_key --password-stdin https://gcr.io < "{{ gcp_service_account_key }}"
     - name: Start Docker service 
       service:
         name: docker
