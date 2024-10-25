@@ -81,7 +81,7 @@
         GCR_KEY_FILE: /root/.docker/keyfile.json
     - name: login GCR
       shell: |
-        docker login -u _json_key --password-stdin https://gcr.io < "{{ gcp_service_account_key }}"
+        cat /root/.docker/keyfile.json | docker login -u _json_key --password-stdin https://gcr.io
     - name: Start Docker service 
       service:
         name: docker
